@@ -25,9 +25,10 @@ Migration và seed được chạy tự động khi backend khởi động. SQLi
 | Vai trò | Username | Mật khẩu |
 |---|---|---|
 | Admin | `admin` | Giá trị `ADMIN_INITIAL_PASSWORD` trong `.env` |
-| Member | `an.nguyen`, `binh.tran`, `chi.le`, `dung.pham`, `ha.vo`, `khanh.do` | `Member123!` |
 
-Seed chỉ chạy khi bảng users chưa có dữ liệu. Hãy đổi toàn bộ mật khẩu mẫu khi triển khai thật.
+Seed chỉ khởi tạo tài khoản `admin` nếu username này chưa tồn tại; không tạo Member, User Story, Daily hay cấu hình mẫu. Chạy lại seed không thay đổi mật khẩu hoặc dữ liệu của tài khoản đã có và không xóa dữ liệu hiện có.
+
+Mật khẩu mặc định trong mã nguồn và `.env.example` là `ChangeMe123!`. Docker yêu cầu cấu hình `ADMIN_INITIAL_PASSWORD`; giá trị đó được ưu tiên khi khởi tạo. Nếu Admin đã đổi mật khẩu, seed không đặt lại mật khẩu mặc định.
 
 ## Chạy local
 
