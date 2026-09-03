@@ -76,6 +76,21 @@ python -m app.seed
 
 Migration đầu tiên tạo đầy đủ foreign key, unique constraint và index. Các bảng quan trọng không có endpoint hard-delete ngoài Daily Report do Admin xác nhận.
 
+### Khắc phục lỗi migration khi chạy trên máy mới
+
+Nếu bản cũ báo `CircularDependencyError` liên quan `created_at`, `updated_at`, `is_reopened`, hãy cập nhật mã nguồn (đặc biệt cả hai migration `0001_initial.py` và `0002_daily_reopen_audit.py`), rồi chạy:
+
+```bash
+docker compose up -d --build
+docker compose logs --tail=100 backend
+```
+
+Bản sửa hỗ trợ database mới, database cũ ở revision `0001_initial` và database đã tạo dở cột/bảng mở lại Daily. Migration không đặt lại mật khẩu, không xóa Daily, User Story hay snapshot báo cáo đã lưu. Database đã ở revision `0002_daily_reopen_audit` không cần chạy lại migration.
+
+Không dùng `docker compose down -v` để khắc phục lỗi này vì lệnh đó xóa volume dữ liệu. Nên backup database có dữ liệu trước khi nâng cấp.
+
+Migration khởi tạo dùng schema cố định, không import model đang phát triển. Kiểm thử migration riêng: `python -m pytest tests/test_migrations.py -q`.
+
 ## Kiểm thử và build
 
 ```bash
